@@ -1,5 +1,8 @@
 # CTeto
+CUIのテトリスゲーです。
 
 1年生の時に作ったから酷いコード(〇ω〇)
+を
+きれいにしました。(ある程度)
 
-`% gcc tetorisu.1.0.c -lncurses`
+`% g++ main.cpp Tetorisu.cpp Piece.cpp Field.cpp -lncurses`
