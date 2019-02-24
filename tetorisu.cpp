@@ -7,35 +7,31 @@
 #include <time.h>
 #include <unistd.h>
 
-#define WAIT_INTERVAL 10000
+constexpr int WAIT_INTERVAL = 10000;
 
-#define FX 20
-#define FY 24
+constexpr int FX = 20;
+constexpr int FY = 24;
 
-#define N_OBJ_X 4
-#define N_OBJ_Y 9
+constexpr int N_OBJ_X = 4;
+constexpr int N_OBJ_Y = 9;
 
-#define OBJ_NUM 7
+constexpr int OBJ_NUM = 7;
 
-#define TRUE 1
-#define FALSE 0
+constexpr char RIGHT_KEY = 'f';
+constexpr char LEFT_KEY = 's';
+constexpr char UP_KEY = 'e';
+constexpr char DOWN_KEY = 'd';
+constexpr char END_KEY = 'q';
+constexpr char CLOCKWISE_KEY = 'l';
+constexpr char C_CLOCKWISE_KEY = 'k';
 
-#define RIGHT_KEY 'f'
-#define LEFT_KEY 's'
-#define UP_KEY 'e'
-#define DOWN_KEY 'd'
-#define END_KEY 'q'
-#define CLOCKWISE_KEY 'l'
-#define C_CLOCKWISE_KEY 'k'
-
-Piece o1 = Piece{"01001100",'A'};
-Piece o2 = Piece{"01000110",'A'};
-Piece o3 = Piece{"00010110",'A'};
-Piece o4 = Piece{"00001101",'A'};
-Piece o5 = Piece{"00011100",'A'};
-Piece o6 = Piece{"01000100",'A'};
-Piece o7 = Piece{"00010101",'A'};
-
+Piece o1 = Piece{"01001100", 'A'};
+Piece o2 = Piece{"01000110", 'A'};
+Piece o3 = Piece{"00010110", 'A'};
+Piece o4 = Piece{"00001101", 'A'};
+Piece o5 = Piece{"00011100", 'A'};
+Piece o6 = Piece{"01000100", 'A'};
+Piece o7 = Piece{"00010101", 'A'};
 
 Piece c_obj, n_obj;
 
