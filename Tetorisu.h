@@ -34,7 +34,8 @@ class Tetorisu {
                             Piece{"00010101", 'A'}};
   Piece c_obj, n_obj;
   Field field;
-  char key;
+  char now_key;
+  int old_x;
   int wait_interval = EASY_INTERVAL;
   bool is_end = false;  // ゲーム終了フラグ
   bool landing_flag = false;

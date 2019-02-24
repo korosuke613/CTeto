@@ -27,6 +27,10 @@ void Tetorisu::game() {
 void Tetorisu::init() {
   std::srand((unsigned)time(NULL));  //乱数の種をセット（最初に１回行う）
   initscr();
+  start_color();
+  init_pair(1, COLOR_WHITE, COLOR_BLACK);  //色1に赤文字の赤地をセット
+  init_pair(2, COLOR_WHITE, COLOR_GREEN);  //色2に青文字の黒地をセット
+  attrset(0);
   noecho();
   timeout(0);
   curs_set(0);
@@ -47,11 +51,12 @@ void Tetorisu::title() {
   field = tmp_field;
   field.set();
   field.draw();
+  old_x = field.p.x;
 
   // スタート画面
   bool is_next = false;
   while (1) {
-    key = getch();
+    now_key = getch();
     move(max_y / 2 - 5, max_x / 2 - 4);
     printw("TETORISU");
 
@@ -72,7 +77,7 @@ void Tetorisu::title() {
 
     refresh();
 
-    switch (key) {
+    switch (now_key) {
       case 'e':
         wait_interval = EASY_INTERVAL;
         mode = Mode::EASY;
@@ -130,7 +135,7 @@ void Tetorisu::start() {
   printw("       ");
   move(max_y / 2 + 4, max_x / 2 - 4);
   printw("       ");
-  key = 'p';
+  now_key = 'p';
 
   //ゲーム画面
   int timer0 = 0;
@@ -138,29 +143,29 @@ void Tetorisu::start() {
   drawPiece(n_obj, 0);
   while (1) {
     if (timer0 == 40) {
-      key = DOWN_KEY;
+      now_key = DOWN_KEY;
       timer0 = 0;
     } else if (timer0 % 2 == 0) {
-      key = getch();
-      if (key == DOWN_KEY) score.point += 10;
+      now_key = getch();
+      if (now_key == DOWN_KEY) score.point += 10;
       score.point++;
 
     } else {
-      key = getch();
-      if (key == DOWN_KEY) score.point += 10;
+      now_key = getch();
+      if (now_key == DOWN_KEY) score.point += 10;
     }
     if (timer1 % 1000 == 0) {
       if (wait_interval > 1000) {
         wait_interval -= 50;
       }
     }
-    if ((key == UP_KEY)) {
+    if ((now_key == UP_KEY)) {
       up_flag = true;
-      key = DOWN_KEY;
+      now_key = DOWN_KEY;
       score.point += 100;
     }
 
-    if ((key == END_KEY)) {
+    if ((now_key == END_KEY)) {
       break;
     }
 
@@ -192,8 +197,8 @@ void Tetorisu::start() {
     printData();
     //		o_data(c_obj);
 
-    checkMove(c_obj, &key);
-    movePiece(&c_obj, key);
+    checkMove(c_obj, &now_key);
+    movePiece(&c_obj, now_key);
 
     refresh();
     if (up_flag == true) {
@@ -231,8 +236,8 @@ void Tetorisu::result() {
 
   bool is_next = false;
   while (1) {
-    key = getch();
-    switch (key) {
+    now_key = getch();
+    switch (now_key) {
       case 'r':
         is_next = true;
         break;
@@ -351,7 +356,8 @@ void Tetorisu::checkMove(Piece obj, char *key) {
           default:
             break;
         }
-        if ((inch() != 'A') && (inch() != ' ') && (inch() != '@')) {
+        char tmp = inch();
+        if ((tmp != 'A') && (tmp != ' ') && (tmp != '@')) {
           if (*key == DOWN_KEY) {
             landing_flag = true;
           }
@@ -400,7 +406,8 @@ void Tetorisu::checkMove(Piece obj, char *key) {
           default:
             break;
         }
-        if ((inch() != 'A') && (inch() != ' ') && (inch() != '@')) {
+        char tmp = inch();
+        if ((tmp != 'A') && (tmp != ' ') && (tmp != '@')) {
           *key = 'p';
         } else {
         }
@@ -471,6 +478,14 @@ void Tetorisu::movePiece(Piece *obj, char key) {
       flag = 1;
       break;
   }
+  move(field.p.y + field.height - 1, old_x);
+  char tmp = '@';
+  addch(tmp);
+  attrset(COLOR_PAIR(2));  // 色2を文字色にセット
+  old_x = obj->p.x;
+  move(field.p.y + field.height - 1, obj->p.x);
+  addch(tmp);
+  attrset(0);
 }
 
 //オブジェクトのデータ把握
