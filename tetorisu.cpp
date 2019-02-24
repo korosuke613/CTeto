@@ -18,7 +18,6 @@ std::vector<Piece> pieces{Piece{"01001100", 'A'}, Piece{"01000110", 'A'},
 Piece c_obj, n_obj;
 
 int max_x, max_y;  // 画面サイズ
-int rmax, lmax, umax;
 int timer0 = 0;
 unsigned long timer1;
 bool landing_flag = false;
@@ -455,23 +454,23 @@ void o_move(Piece *obj, char key) {
   int flag = 0;
   switch (key) {
     case RIGHT_KEY:
-      if ((obj->p.x) < (field.p.x + FX - rmax - 2)) {
+      if ((obj->p.x) < (field.p.x + FX - obj->rmax - 2)) {
         draw_obj(*obj, 1);
         obj->p.x++;
       }
       break;
 
     case LEFT_KEY:
-      if (((obj->p.x) > (field.p.x + lmax + 1))) {
+      if (((obj->p.x) > (field.p.x + obj->lmax + 1))) {
         draw_obj(*obj, 1);
         obj->p.x--;
       }
       break;
 
     case DOWN_KEY:
-      if (((obj->p.y) < (field.p.y + FY - 2 - umax)) &&
-          (field.f[obj->p.x - field.p.x][obj->p.y + field.p.y + 1 + umax] !=
-           300)) {
+      if (((obj->p.y) < (field.p.y + FY - 2 - obj->umax)) &&
+          (field.f[obj->p.x - field.p.x]
+                  [obj->p.y + field.p.y + 1 + obj->umax] != 300)) {
         draw_obj(*obj, 1);
         obj->p.y++;
       } else {
@@ -555,40 +554,32 @@ void draw_obj(Piece obj, int n) {
   addch(obj.c);
 
   i = 0;
-  lmax = rmax = umax = 0;
   while (obj.m[i] != '\0') {
     if (obj.m[i] == '1') {
       switch (i) {
         case 0:
           move(a.y - 1, a.x - 1);
-          lmax = 1;
           break;
         case 1:
           move(a.y - 1, a.x);
           break;
         case 2:
           move(a.y - 1, a.x + 1);
-          rmax = 1;
           break;
         case 3:
           move(a.y, a.x + 1);
-          rmax = 1;
           break;
         case 4:
           move(a.y + 1, a.x + 1);
-          rmax = umax = 1;
           break;
         case 5:
           move(a.y + 1, a.x);
-          umax = 1;
           break;
         case 6:
           move(a.y + 1, a.x - 1);
-          lmax = umax = 1;
           break;
         case 7:
           move(a.y, a.x - 1);
-          lmax = 1;
           break;
         default:
           break;
