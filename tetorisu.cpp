@@ -44,7 +44,6 @@ int main(void) {
   printf("aaaa\n");
 
   initTET();
-  srand((unsigned)time(NULL));  //乱数の種をセット（最初に１回行う）
   Field tmp_field(max_x, max_y);
   field = tmp_field;
   field.set();
@@ -257,6 +256,7 @@ void choice_obj(Piece *obj) {
 
 //テトリスの準備
 void initTET(void) {
+  srand((unsigned)time(NULL));  //乱数の種をセット（最初に１回行う）
   initscr();
   noecho();
   timeout(0);
