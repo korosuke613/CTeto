@@ -21,7 +21,7 @@ int max_x, max_y;  // 画面サイズ
 int rmax, lmax, umax;
 int timer0 = 0;
 unsigned long timer1;
-int landing_flag = 0;
+bool landing_flag = false;
 long g_point;
 Field field;
 
@@ -384,7 +384,7 @@ void o_check(Piece obj, char *key) {
         }
         if ((inch() != 'A') && (inch() != ' ') && (inch() != '@')) {
           if (*key == DOWN_KEY) {
-            landing_flag = 1;
+            landing_flag = true;
           }
           *key = 'p';
         } else {
@@ -444,7 +444,7 @@ void o_check(Piece obj, char *key) {
   move(a.y + by, a.x + bx);
   if ((inch() != 'A') && (inch() != ' ') && (inch() != '@')) {
     if (*key == DOWN_KEY) {
-      landing_flag = 1;
+      landing_flag = true;
     }
     *key = UP_KEY;
   }
@@ -475,7 +475,7 @@ void o_move(Piece *obj, char key) {
         draw_obj(*obj, 1);
         obj->p.y++;
       } else {
-        landing_flag = 1;
+        landing_flag = true;
       }
       break;
       c_obj.p.y = field.p.y;
