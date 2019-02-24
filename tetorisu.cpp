@@ -1,5 +1,6 @@
 #include "Piece.h"
 #include "Point.h"
+#include "Keys.h"
 
 #include <curses.h>
 #include <stdlib.h>
@@ -16,14 +17,6 @@ constexpr int N_OBJ_X = 4;
 constexpr int N_OBJ_Y = 9;
 
 constexpr int OBJ_NUM = 7;
-
-constexpr char RIGHT_KEY = 'f';
-constexpr char LEFT_KEY = 's';
-constexpr char UP_KEY = 'e';
-constexpr char DOWN_KEY = 'd';
-constexpr char END_KEY = 'q';
-constexpr char CLOCKWISE_KEY = 'l';
-constexpr char C_CLOCKWISE_KEY = 'k';
 
 Piece o1 = Piece{"01001100", 'A'};
 Piece o2 = Piece{"01000110", 'A'};
@@ -60,9 +53,9 @@ int main(void) {
   char key;
   int i, j;
   int wait_interval = 10000;
-  int result_flag = FALSE;
-  int up_flag = 0;
-  int end = 0;
+  bool result_flag = false;
+  bool up_flag = false;
+  bool end = false;
 
   initTET();
   srand((unsigned)time(NULL));  //乱数の種をセット（最初に１回行う）
@@ -70,7 +63,7 @@ int main(void) {
 
 TITLE:
   g_point = 0;
-  result_flag = FALSE;
+  result_flag = false;
   choice_obj(&n_obj);
 
   c_obj = n_obj;
@@ -124,7 +117,7 @@ TITLE:
         break;
 
       case 'q':
-        end = TRUE;
+        end = true;
         goto START;
         break;
 
@@ -134,7 +127,7 @@ TITLE:
   }
 
 START:
-  if (end == TRUE) {
+  if (end == true) {
     endwin();
     return 0;
   }
@@ -175,7 +168,7 @@ START:
       }
     }
     if ((key == UP_KEY)) {
-      up_flag = TRUE;
+      up_flag = true;
       key = DOWN_KEY;
       g_point += 100;
     }
@@ -184,10 +177,10 @@ START:
       break;
     }
 
-    if (landing_flag != TRUE) {
+    if (landing_flag != true) {
       draw_obj(c_obj, 0);
     } else {
-      up_flag = FALSE;
+      up_flag = false;
       draw_obj(c_obj, 2);
       line_lapse(c_obj);
       c_obj = n_obj;
@@ -200,11 +193,11 @@ START:
       c_obj.p.y = fo_y;
       move(c_obj.p.y, c_obj.p.x);
       if (inch() != ' ') {
-        result_flag = TRUE;
+        result_flag = true;
       }
-      landing_flag = FALSE;
+      landing_flag = false;
     }
-    if (result_flag == TRUE) {
+    if (result_flag == true) {
       break;
     }
 
@@ -215,7 +208,7 @@ START:
     o_move(&c_obj, key);
 
     refresh();
-    if (up_flag == TRUE) {
+    if (up_flag == true) {
       usleep(10);
     } else {
       usleep(wait_interval);
