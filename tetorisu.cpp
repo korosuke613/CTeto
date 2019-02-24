@@ -1,6 +1,7 @@
+#include <vector>
+#include "Keys.h"
 #include "Piece.h"
 #include "Point.h"
-#include "Keys.h"
 
 #include <curses.h>
 #include <stdlib.h>
@@ -18,13 +19,10 @@ constexpr int N_OBJ_Y = 9;
 
 constexpr int OBJ_NUM = 7;
 
-Piece o1 = Piece{"01001100", 'A'};
-Piece o2 = Piece{"01000110", 'A'};
-Piece o3 = Piece{"00010110", 'A'};
-Piece o4 = Piece{"00001101", 'A'};
-Piece o5 = Piece{"00011100", 'A'};
-Piece o6 = Piece{"01000100", 'A'};
-Piece o7 = Piece{"00010101", 'A'};
+std::vector<Piece> pieces{Piece{"01001100", 'A'}, Piece{"01000110", 'A'},
+                          Piece{"00010110", 'A'}, Piece{"00001101", 'A'},
+                          Piece{"00011100", 'A'}, Piece{"01000100", 'A'},
+                          Piece{"00010101", 'A'}};
 
 Piece c_obj, n_obj;
 
@@ -262,34 +260,8 @@ START:
 void choice_obj(Piece *obj) {
   int n;
 
-  n = rand() % OBJ_NUM + 1;
-
-  switch (n) {
-    case 1:
-      *obj = o1;
-      break;
-    case 2:
-      *obj = o2;
-      break;
-    case 3:
-      *obj = o3;
-      break;
-    case 4:
-      *obj = o4;
-      break;
-    case 5:
-      *obj = o5;
-      break;
-    case 6:
-      *obj = o6;
-      break;
-    case 7:
-      *obj = o7;
-      break;
-    default:
-      *obj = o1;
-      break;
-  }
+  n = rand() % OBJ_NUM;
+  *obj = pieces[n];
 }
 
 //配列に壁のデータを格納
