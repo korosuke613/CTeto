@@ -1,12 +1,10 @@
 constexpr int WAIT_INTERVAL = 10000;
 
-constexpr int FX = 20;
-constexpr int FY = 24;
+constexpr int FX = 20;  // 壁の横の長さ
+constexpr int FY = 24;  // 壁の縦の長さ
 
 constexpr int N_OBJ_X = 4;
 constexpr int N_OBJ_Y = 9;
-
-constexpr int OBJ_NUM = 7;
 
 constexpr char RIGHT_KEY = 'f';
 constexpr char LEFT_KEY = 's';

@@ -16,7 +16,7 @@ std::vector<Piece> pieces{Piece{"01001100", 'A'}, Piece{"01000110", 'A'},
 
 Piece c_obj, n_obj;
 
-int max_x, max_y;
+int max_x, max_y; // 画面サイズ
 int fo_x, fo_y;
 int field[FX][FY] = {{0}};
 int rmax, lmax, umax;
@@ -250,7 +250,7 @@ START:
 void choice_obj(Piece *obj) {
   int n;
 
-  n = rand() % OBJ_NUM;
+  n = rand() % pieces.size();
   *obj = pieces[n];
 }
 
