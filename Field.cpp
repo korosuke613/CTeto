@@ -2,12 +2,13 @@
 
 //配列に壁のデータを格納
 void Field::set() {
-  f.resize(width);
-  for (auto x : f) {
-    x.resize(height);
+  std::vector<int> tmp = {0};
+  tmp.resize(height);
+
+  for (int i = 0; i < width; i++) {
+    f.push_back(tmp);
   }
-  int i;
-  for (i = 0; i < height; i++) {
+  for (int i = 0; i < height; i++) {
     f[0][i] = 100;
     f[width - 1][i] = 100;
     if (i == (height - 1)) {

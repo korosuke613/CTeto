@@ -1,4 +1,5 @@
 #include <vector>
+#include "Field.h"
 #include "Piece.h"
 #include "Point.h"
 #include "settings.h"
@@ -16,21 +17,18 @@ std::vector<Piece> pieces{Piece{"01001100", 'A'}, Piece{"01000110", 'A'},
 
 Piece c_obj, n_obj;
 
-int max_x, max_y; // 画面サイズ
-int fo_x, fo_y;
-int field[FX][FY] = {{0}};
+int max_x, max_y;  // 画面サイズ
 int rmax, lmax, umax;
 int timer0 = 0;
 unsigned long timer1;
 int landing_flag = 0;
 long g_point;
+Field field;
 
 void initTET(void);
 void draw_obj(Piece obj, int n);
 void o_move(Piece *obj, char key);
 void o_data(Piece obj);
-void draw_field(void);
-void set_field(void);
 void o_check(Piece obj, char *key);
 void line_lapse(Piece obj);
 void choice_obj(Piece *obj);
@@ -43,10 +41,13 @@ int main(void) {
   bool result_flag = false;
   bool up_flag = false;
   bool end = false;
+  printf("aaaa\n");
 
   initTET();
   srand((unsigned)time(NULL));  //乱数の種をセット（最初に１回行う）
-  set_field();
+  Field tmp_field(max_x, max_y);
+  field = tmp_field;
+  field.set();
 
 TITLE:
   g_point = 0;
@@ -59,9 +60,9 @@ TITLE:
   n_obj.p.y = N_OBJ_Y;
 
   c_obj.p.x = max_x / 2;
-  c_obj.p.y = fo_y;
+  c_obj.p.y = field.p.y;
 
-  draw_field();
+  field.draw();
   refresh();
 
   // スタート画面
@@ -177,7 +178,7 @@ START:
       n_obj.p.y = N_OBJ_Y;
       draw_obj(n_obj, 0);
       c_obj.p.x = max_x / 2;
-      c_obj.p.y = fo_y;
+      c_obj.p.y = field.p.y;
       move(c_obj.p.y, c_obj.p.x);
       if (inch() != ' ') {
         result_flag = true;
@@ -254,40 +255,6 @@ void choice_obj(Piece *obj) {
   *obj = pieces[n];
 }
 
-//配列に壁のデータを格納
-void set_field(void) {
-  int i;
-  for (i = 0; i < FY; i++) {
-    field[0][i] = 100;
-    field[FX - 1][i] = 100;
-    if (i == (FY - 1)) {
-      for (i = 0; i < FX; i++) {
-        field[i][FY - 1] = 100;
-      }
-      i = FY - 1;
-    }
-  }
-  fo_x = max_x / 2 - (FX / 2);
-  fo_y = max_y / 2 - (FY / 2);
-}
-
-//壁を描画
-void draw_field(void) {
-  int i, j;
-  for (i = 0; i < FY; i++) {
-    for (j = 0; j < FX; j++) {
-      move(fo_y + i, fo_x + j);
-      if (field[j][i] == 100) {
-        addch('@');
-        refresh();
-      } else if (field[j][i] == 300) {
-        addch('?');
-        refresh();
-      }
-    }
-  }
-}
-
 //テトリスの準備
 void initTET(void) {
   initscr();
@@ -307,22 +274,22 @@ void line_lapse(Piece obj) {
 
   for (i = 2; i >= 0; i--) {
     for (j = 0; j < (FX - 2); j++) {
-      move(a.y - i + 1, j + fo_x + 1);
+      move(a.y - i + 1, j + field.p.x + 1);
       if (inch() != '?') break;
       flag++;
     }
     if (flag >= FX - 2) {
       for (j = 0; j < (FX - 2); j++) {
-        move(a.y - i + 1, j + fo_x + 1);
+        move(a.y - i + 1, j + field.p.x + 1);
         addch(' ');
         usleep(10000);
         refresh();
       }
       for (j = 0; j < FY - 2; j++) {
         for (k = 0; k < (FX - 2); k++) {
-          move(a.y - i - j, k + fo_x + 1);
+          move(a.y - i - j, k + field.p.x + 1);
           c = inch();
-          move(a.y - i - j + 1, k + fo_x + 1);
+          move(a.y - i - j + 1, k + field.p.x + 1);
           addch(c);
         }
       }
@@ -488,41 +455,44 @@ void o_move(Piece *obj, char key) {
   int flag = 0;
   switch (key) {
     case RIGHT_KEY:
-      if ((obj->p.x) < (fo_x + FX - rmax - 2)) {
+      if ((obj->p.x) < (field.p.x + FX - rmax - 2)) {
         draw_obj(*obj, 1);
         obj->p.x++;
       }
       break;
 
     case LEFT_KEY:
-      if (((obj->p.x) > (fo_x + lmax + 1))) {
+      if (((obj->p.x) > (field.p.x + lmax + 1))) {
         draw_obj(*obj, 1);
         obj->p.x--;
       }
       break;
 
     case DOWN_KEY:
-      if (((obj->p.y) < (fo_y + FY - 2 - umax)) &&
-          (field[obj->p.x - fo_x][obj->p.y + fo_y + 1 + umax] != 300)) {
+      if (((obj->p.y) < (field.p.y + FY - 2 - umax)) &&
+          (field.f[obj->p.x - field.p.x][obj->p.y + field.p.y + 1 + umax] !=
+           300)) {
         draw_obj(*obj, 1);
         obj->p.y++;
       } else {
         landing_flag = 1;
       }
       break;
-      c_obj.p.y = fo_y;
+      c_obj.p.y = field.p.y;
 
     case CLOCKWISE_KEY:
-      if (((obj->p.x) < (fo_x + FX - 2)) && ((obj->p.x) > (fo_x + 1)) &&
-          ((obj->p.y) < (fo_y + FY - 2))) {
+      if (((obj->p.x) < (field.p.x + FX - 2)) &&
+          ((obj->p.x) > (field.p.x + 1)) &&
+          ((obj->p.y) < (field.p.y + FY - 2))) {
         draw_obj(*obj, 1);
         obj->rotate(true);
       }
       break;
 
     case C_CLOCKWISE_KEY:
-      if (((obj->p.x) < (fo_x + FX - 2)) && ((obj->p.x) > (fo_x + 1)) &&
-          ((obj->p.y) < (fo_y + FY - 2))) {
+      if (((obj->p.x) < (field.p.x + FX - 2)) &&
+          ((obj->p.x) > (field.p.x + 1)) &&
+          ((obj->p.y) < (field.p.y + FY - 2))) {
         draw_obj(*obj, 1);
         obj->rotate(false);
       }
@@ -550,7 +520,7 @@ void o_data(Piece obj) {
      move(1,0);
      printw("lmax=%2d, rmax=%2d, umax=%2d", lmax, rmax, umax);
      move(2,0);
-     printw("fo_x=%2d, fo_y=%2d", fo_x, fo_y);
+     printw("field.p.x=%2d, field.p.y=%2d", field.p.x, field.p.y);
      move(3,0);
      printw("p.x=%2d, p.y=%2d", c_obj.p.x, c_obj.p.y);
      move(4,0);
