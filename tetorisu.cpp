@@ -1,23 +1,13 @@
 #include <vector>
-#include "Keys.h"
 #include "Piece.h"
 #include "Point.h"
+#include "settings.h"
 
 #include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-
-constexpr int WAIT_INTERVAL = 10000;
-
-constexpr int FX = 20;
-constexpr int FY = 24;
-
-constexpr int N_OBJ_X = 4;
-constexpr int N_OBJ_Y = 9;
-
-constexpr int OBJ_NUM = 7;
 
 std::vector<Piece> pieces{Piece{"01001100", 'A'}, Piece{"01000110", 'A'},
                           Piece{"00010110", 'A'}, Piece{"00001101", 'A'},
