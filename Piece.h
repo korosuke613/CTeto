@@ -1,7 +1,6 @@
 #ifndef __PIECE_H__
 #define __PIECE_H__
 
-#include <curses.h>
 #include <cstring>
 #include <string>
 #include "Point.h"
