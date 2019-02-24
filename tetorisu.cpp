@@ -555,7 +555,7 @@ void o_move(Piece *obj, char key) {
       if (((obj->p.x) < (fo_x + FX - 2)) && ((obj->p.x) > (fo_x + 1)) &&
           ((obj->p.y) < (fo_y + FY - 2))) {
         draw_obj(*obj, 1);
-        kaiten(obj, 0);
+        obj->rotate(true);
       }
       break;
 
@@ -563,7 +563,7 @@ void o_move(Piece *obj, char key) {
       if (((obj->p.x) < (fo_x + FX - 2)) && ((obj->p.x) > (fo_x + 1)) &&
           ((obj->p.y) < (fo_y + FY - 2))) {
         draw_obj(*obj, 1);
-        kaiten(obj, 1);
+        obj->rotate(false);
       }
       break;
 

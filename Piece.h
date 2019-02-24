@@ -9,6 +9,7 @@ class Piece {
  public:
   Piece() {}
   explicit Piece(const char* m_, char c_) : c(c_) { std::strcpy(m, m_); }
+  void rotate(bool isClockwise);
   Point p;
   char m[9];
   char c;
