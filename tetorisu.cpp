@@ -39,7 +39,6 @@ long g_point;
 
 void initTET(void);
 void draw_obj(Piece obj, int n);
-void kaiten(Piece *obj, int n);
 void o_move(Piece *obj, char key);
 void o_data(Piece obj);
 void draw_field(void);
@@ -675,39 +674,5 @@ void draw_obj(Piece obj, int n) {
       }
     }
     i++;
-  }
-}
-
-//オブジェクトの回転
-void kaiten(Piece *obj, int n) {
-  char temp[9] = "00000000";
-  int i = 0;
-
-  if (n == 0) {
-    while (obj->m[i] != '\0') {
-      if (obj->m[i] == '1') {
-        if (i < 6) {
-          temp[i + 2] = '1';
-        } else {
-          temp[i - 6] = '1';
-        }
-      }
-      i++;
-    }
-  } else {
-    while (obj->m[i] != '\0') {
-      if (obj->m[i] == '1') {
-        if (i > 1) {
-          temp[i - 2] = '1';
-        } else {
-          temp[i + 6] = '1';
-        }
-      }
-      i++;
-    }
-  }
-
-  for (i = 0; i < 9; i++) {
-    obj->m[i] = temp[i];
   }
 }
